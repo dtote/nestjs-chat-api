@@ -1,4 +1,4 @@
-import { UserStatus } from '../../shared/enums/user-status'
+import { UserStatus } from '../enums/user-status'
 
 export class GetUserDto {
   public readonly email: string

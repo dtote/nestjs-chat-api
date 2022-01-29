@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { NotificationsRepository } from '../notifications/notifications.repository'
-import { UserStatus } from '../shared/enums/user-status'
+import { UserStatus } from '../users/enums/user-status'
 import { User } from '../users/user.entity'
 import { UsersRepository } from '../users/users.repository'
 import { CreateMessageDto } from './dtos/create-message-dto'

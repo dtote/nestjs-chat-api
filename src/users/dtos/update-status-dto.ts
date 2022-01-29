@@ -1,5 +1,5 @@
 import { IsEnum, IsNotEmpty } from 'class-validator'
-import { UserStatus } from '../../shared/enums/user-status'
+import { UserStatus } from '../enums/user-status'
 
 export class UpdateStatusDto {
   @IsNotEmpty()

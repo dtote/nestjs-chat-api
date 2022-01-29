@@ -1,9 +1,9 @@
 import { ConflictException, InternalServerErrorException, NotFoundException } from '@nestjs/common'
 import * as bcrypt from 'bcrypt'
 import { EntityRepository, Repository } from 'typeorm'
-import { UserStatus } from '../shared/enums/user-status'
 import { CreateUserDto } from './dtos/create-user-dto'
 import { UpdateProfileDto } from './dtos/update-profile-dto'
+import { UserStatus } from './enums/user-status'
 import { User } from './user.entity'
 
 @EntityRepository(User)
