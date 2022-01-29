@@ -1,11 +1,11 @@
 import { Body, Controller, Get, Patch, Post, Put, UseGuards } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
+import { GetUser } from './decorators/get-user.decorator'
 import { CreateUserDto } from './dtos/create-user-dto'
 import { GetUserDto } from './dtos/get-user-dto'
 import { LoginUserDto } from './dtos/login-user-dto'
 import { UpdateProfileDto } from './dtos/update-profile-dto'
 import { UserStatus } from './enums/user-status'
-import { GetUser } from './get-user.decorator'
 import { User } from './user.entity'
 import { UsersService } from './users.service'
 

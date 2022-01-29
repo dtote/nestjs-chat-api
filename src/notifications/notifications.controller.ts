@@ -1,6 +1,6 @@
 import { Controller, Get, UseGuards } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
-import { GetUser } from '../users/get-user.decorator'
+import { GetUser } from '../users/decorators/get-user.decorator'
 import { User } from '../users/user.entity'
 import { Notification } from './notification.entity'
 import { NotificationsService } from './notifications.service'

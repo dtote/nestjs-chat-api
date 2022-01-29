@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
-import { GetUser } from '../users/get-user.decorator'
+import { GetUser } from '../users/decorators/get-user.decorator'
 import { User } from '../users/user.entity'
 import { CreateMessageDto } from './dtos/create-message-dto'
 import { Message } from './message.entity'
