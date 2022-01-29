@@ -2,7 +2,7 @@
 
 server:
 	@echo "Initialising the server...👷"
-	@yarn start
+	@yarn start:dev
 
 db:
 	@echo "Bootin' up the database! 🚗💨"
