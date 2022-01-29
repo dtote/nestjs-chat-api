@@ -8,4 +8,9 @@ export class CreateNotificationDto {
   @IsString()
   @IsNotEmpty()
   public readonly note: string
+
+  constructor(params: { messageId: string; note: string }) {
+    this.messageId = params.messageId
+    this.note = params.note
+  }
 }
