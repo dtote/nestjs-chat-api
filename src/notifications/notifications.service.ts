@@ -1,27 +1,25 @@
 import { Injectable } from '@nestjs/common'
-import { v4 as uuid } from 'uuid'
+import { InjectRepository } from '@nestjs/typeorm'
+import { User } from '../users/user.entity'
 import { CreateNotificationDto } from './dtos/create-notification-dto'
-import { Notification } from './notification.model'
+import { Notification } from './notification.entity'
+import { NotificationsRepository } from './notifications.repository'
 
 @Injectable()
 export class NotificationsService {
-  private notifications: Notification[] = []
+  constructor(
+    @InjectRepository(NotificationsRepository)
+    private notificationsRepository: NotificationsRepository
+  ) {}
 
-  getNotifications(): Notification[] {
-    return this.notifications
+  async getNotifications(user: User): Promise<Notification[]> {
+    return this.notificationsRepository.getNotifications(user)
   }
 
-  createNotification(createNotificationDto: CreateNotificationDto): Notification {
-    const { messageId, note } = createNotificationDto
-
-    const notification: Notification = {
-      id: uuid(),
-      messageId,
-      note,
-    }
-
-    this.notifications.push(notification)
-
-    return notification
+  async createNotification(
+    createNotificationDto: CreateNotificationDto,
+    email: string
+  ): Promise<void> {
+    return this.notificationsRepository.createNotification(createNotificationDto, email)
   }
 }
