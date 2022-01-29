@@ -1,36 +1,43 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
-import { v4 as uuid } from 'uuid'
+import { InjectRepository } from '@nestjs/typeorm'
+import { NotificationsRepository } from '../notifications/notifications.repository'
+import { UserStatus } from '../shared/enums/user-status'
+import { User } from '../users/user.entity'
+import { UsersRepository } from '../users/users.repository'
 import { CreateMessageDto } from './dtos/create-message-dto'
-import { Message } from './message.model'
+import { Message } from './message.entity'
+import { MessagesRepository } from './messages.repository'
 
 @Injectable()
 export class MessagesService {
-  private messages: Message[] = []
+  constructor(
+    @InjectRepository(MessagesRepository) private messagesRepository: MessagesRepository,
+    @InjectRepository(NotificationsRepository)
+    private notificationsRepository: NotificationsRepository,
+    @InjectRepository(UsersRepository) private usersRepository: UsersRepository
+  ) {}
 
-  getAllMessages(): Message[] {
-    return this.messages
+  getAllMessages(user: User): Promise<Message[]> {
+    return this.messagesRepository.getAllMessages(user)
   }
 
-  getMessageById(id: string): Message {
-    const found = this.messages.find((message) => message.id === id)
+  async createMessage(createMessageDto: CreateMessageDto, user: User): Promise<Message> {
+    const { to } = createMessageDto
+    const found = await this.usersRepository.findOne({ email: to })
 
-    if (!found) throw new NotFoundException(`Message with id "${id}" not found`)
+    if (!found) throw new NotFoundException(`User with email ${to} doesn't exist`)
 
-    return found
-  }
+    const createdMessage = await this.messagesRepository.createMessage(createMessageDto, user)
 
-  createMessage(createMessageDto: CreateMessageDto): Message {
-    const { from, to, note } = createMessageDto
+    if (found.status === UserStatus.ACTIVE) {
+      const newNotification = {
+        messageId: createdMessage.id,
+        note: `McFly App: Message received from ${createdMessage.from}`,
+      }
 
-    const message: Message = {
-      id: uuid(),
-      from,
-      to,
-      note,
+      this.notificationsRepository.createNotification(newNotification, user.email)
     }
 
-    this.messages.push(message)
-
-    return message
+    return createdMessage
   }
 }

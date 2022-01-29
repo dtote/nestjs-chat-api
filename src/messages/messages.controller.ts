@@ -1,24 +1,25 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common'
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common'
+import { AuthGuard } from '@nestjs/passport'
+import { GetUser } from '../users/get-user.decorator'
+import { User } from '../users/user.entity'
 import { CreateMessageDto } from './dtos/create-message-dto'
-import { Message } from './message.model'
+import { Message } from './message.entity'
 import { MessagesService } from './messages.service'
-
 @Controller('messages')
+@UseGuards(AuthGuard())
 export class MessagesController {
   constructor(private messagesService: MessagesService) {}
 
   @Get()
-  getAllMessages(): Message[] {
-    return this.messagesService.getAllMessages()
-  }
-
-  @Get('/:id')
-  getMessageById(@Param('id') id: string): Message {
-    return this.messagesService.getMessageById(id)
+  getAllMessages(@GetUser() user: User): Promise<Message[]> {
+    return this.messagesService.getAllMessages(user)
   }
 
   @Post()
-  createMessage(@Body() createMessageDto: CreateMessageDto): Message {
-    return this.messagesService.createMessage(createMessageDto)
+  createMessage(
+    @Body() createMessageDto: CreateMessageDto,
+    @GetUser() user: User
+  ): Promise<Message> {
+    return this.messagesService.createMessage(createMessageDto, user)
   }
 }
